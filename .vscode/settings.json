@@ -1,0 +1,21 @@
+{
+  "haxe.configurations": [
+    ["hxml/shared.hxml"],
+    ["hxml/love2d.hxml"],
+    ["hxml/web.hxml"],
+    ["hxml/game-web.hxml"],
+    ["hxml/game-love2d.hxml"]
+  ],
+  "haxecheckstyle.sourceFolders": [
+    "platforms",
+    "src",
+    "tools",
+    "tests/tools",
+    "tests/nyro/game"
+  ],
+  "[haxe]": {
+    "editor.codeActionsOnSave": {
+      "source.sortImports": "explicit"
+    }
+  }
+}

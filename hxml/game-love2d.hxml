@@ -1,0 +1,13 @@
+-L love2d-hx
+
+-cp src
+-cp platforms/love2d
+-cp tests/nyro/game
+
+-D lua-vanilla
+-D luajit
+-D love2d
+
+--lua export/love2d/main.lua
+
+--main Main

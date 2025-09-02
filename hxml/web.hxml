@@ -1,0 +1,10 @@
+-cp src
+-cp platforms/web
+-cp tests/nyro/build
+
+-D js-es=6
+-D web
+
+--js export/web/main.js
+
+--main Build

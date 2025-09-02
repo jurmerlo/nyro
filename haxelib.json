@@ -1,0 +1,13 @@
+{
+  "name": "nyro",
+  "version": "0.1.0",
+  "description": "",
+  "classPath": "src",
+  "license": "MIT",
+  "contributors": ["Jurmerlo"],
+  "releasenote": "",
+  "url": "https://github.com/jurmerlo/nyro",
+  "dependencies": {
+    "format": ""
+  }
+}

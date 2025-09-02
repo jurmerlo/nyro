@@ -1,0 +1,8 @@
+-cp src
+-cp tests/nyro/build
+
+-D js-es=6
+
+--js export/web/main.js
+
+--main Build
