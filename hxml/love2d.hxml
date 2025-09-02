@@ -1,7 +1,6 @@
 -L love2d-hx
 
 -cp src
--cp platforms/love2d
 -cp tests/nyro/build
 
 -D lua-vanilla

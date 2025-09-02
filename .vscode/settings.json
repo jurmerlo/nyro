@@ -4,7 +4,8 @@
     ["hxml/love2d.hxml"],
     ["hxml/web.hxml"],
     ["hxml/game-web.hxml"],
-    ["hxml/game-love2d.hxml"]
+    ["hxml/game-love2d.hxml"],
+    ["hxml/run.hxml"]
   ],
   "haxecheckstyle.sourceFolders": [
     "platforms",
