@@ -101,7 +101,7 @@ private function generateHxml(config: Config) {
 
   var filename = '';
   if (config.target == ExportTarget.Web) {
-    fileData == '-D web\n';
+    fileData += '-D web\n';
     filename = 'web.hxml';
   } else if (config.target == ExportTarget.Love2D) {
     fileData += '-D lua-vanilla\n';
