@@ -46,6 +46,7 @@ class Run {
       final codeOnly = args.contains('--code-only');
       final noAtlas = args.contains('--no-atlas') || codeOnly;
       final noAssets = args.contains('--no-assets') || codeOnly;
+      final pack = args.contains('--pack');
 
       config.exportPath = Path.join([config.exportPath, config.target]);
 
@@ -53,7 +54,8 @@ class Run {
         clean: clean,
         debug: debug,
         noAtlas: noAtlas,
-        noAssets: noAssets
+        noAssets: noAssets,
+        pack: pack
       }, Timer.stamp());
 
       Sys.exit(0);

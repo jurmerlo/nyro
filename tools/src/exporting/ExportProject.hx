@@ -1,6 +1,10 @@
 package tools.src.exporting;
 
+import haxe.crypto.Crc32;
+import haxe.io.Bytes;
 import haxe.io.Path;
+import haxe.zip.Entry;
+import haxe.zip.Writer;
 
 import sys.FileSystem;
 import sys.io.File;
@@ -11,20 +15,38 @@ import tools.src.utils.Utils.runCommand;
 
 using StringTools;
 
-function exportProject(config: Config) {
+/**
+ * Export the project.
+ * @param config The nyro configuration.
+ * @param pack Whether to pack the build into a .love file if the target is love2d.
+ */
+function exportProject(config: Config, pack: Bool) {
   generateHxml(config);
   if (config.target == ExportTarget.Love2D) {
-    exportLove2d(config);
+    exportLove2d(config, pack);
   } else if (config.target == ExportTarget.Web) {
     exportWeb(config);
   }
 }
 
-private function exportLove2d(config: Config) {
+/**
+ * Export the love2d build.
+ * @param config The nyro configuration.
+ * @param pack Whether to pack the build into a .love file.
+ */
+private function exportLove2d(config: Config, pack: Bool) {
   runCommand('', 'haxe', ['hxml/love2d.hxml']);
   createLove2dConfig(config);
+
+  if (pack) {
+    packLove2d(config);
+  }
 }
 
+/**
+ * Export the web build.
+ * @param config The nyro configuration.
+ */
 private function exportWeb(config: Config) {
   runCommand('', 'haxe', ['hxml/web.hxml']);
   copyTemplate(config);
@@ -140,6 +162,10 @@ private function copyTemplate(config: Config) {
   File.saveContent(Path.join([config.exportPath, 'index.html']), template);
 }
 
+/**
+ * Create the love2d `conf.lua` configuration file.
+ * @param config The nyro configuration.
+ */
 private function createLove2dConfig(config: Config) {
   Sys.println('Creating love2d config...');
   var fileData = 'function love.conf(t)\n';
@@ -289,4 +315,63 @@ private function createLove2dConfig(config: Config) {
   fileData += 'end\n';
 
   File.saveContent(Path.join([config.exportPath, 'conf.lua']), fileData);
+}
+
+/**
+ * Pack the export directory into a .love file.
+ * @param config The nyro configuration.
+ */
+private function packLove2d(config: Config) {
+  Sys.println('Packing Love2D project...');
+  final zipEntries = getFilesToZip(config.exportPath);
+  for (entry in zipEntries) {
+    Sys.println(' - ' + entry.fileName);
+  }
+  final file = File.write(Path.join([config.exportPath, '${config.title}.love']));
+  final zip = new Writer(file);
+  zip.write(zipEntries);
+  file.close();
+}
+
+/**
+ * Get all files in a directory and its subdirectories to be zipped.
+ * @param dir The directory to search.
+ * @param entries The list of entries to populate.
+ * @param parentDir The directory to use as the base for relative paths.
+ */
+private function getFilesToZip(dir: String, ?entries: List<Entry>, ?parentDir: String) {
+  if (entries == null) {
+    entries = new List<Entry>();
+  }
+
+  if (parentDir == null) {
+    parentDir = Path.addTrailingSlash(dir);
+  }
+
+  for (file in FileSystem.readDirectory(dir)) {
+    final path = Path.join([dir, file]);
+    if (FileSystem.isDirectory(path)) {
+      getFilesToZip(path, entries, parentDir);
+      FileSystem.deleteDirectory(path);
+    } else {
+      if (path.contains('.DS_Store') || path.contains('Thumbs.db') || path.endsWith('.love')) {
+        FileSystem.deleteFile(path);
+        continue;
+      }
+
+      final bytes: Bytes = Bytes.ofData(File.getBytes(path).getData());
+      final entry: Entry = {
+        fileName: path.replace(parentDir, ''),
+        fileSize: bytes.length,
+        fileTime: Date.now(),
+        compressed: false,
+        dataSize: FileSystem.stat(path).size,
+        data: bytes,
+        crc32: Crc32.make(bytes)
+      };
+      entries.push(entry);
+      FileSystem.deleteFile(path);
+    }
+  }
+  return entries;
 }

@@ -14,13 +14,42 @@ import tools.src.utils.Utils.copyDir;
 import tools.src.utils.Utils.deleteDir;
 import tools.src.utils.Utils.getHaxelibPath;
 
+/**
+ * Export options for the project.
+ */
 typedef ExportOptions = {
+  /**
+   * Whether to clean the export path before building.
+   */
   var clean: Bool;
+
+  /**
+   * Whether to enable debug mode.
+   */
   var debug: Bool;
+
+  /**
+   * Whether to disable atlas generation.
+   */
   var noAtlas: Bool;
+
+  /**
+   * Whether to disable asset copying.
+   */
   var noAssets: Bool;
+
+  /**
+   * Whether to pack the build into a .love file if the target is love2d.
+   */
+  var pack: Bool;
 }
 
+/**
+ * Export the project.
+ * @param config The nyro configuration.
+ * @param options The export options.
+ * @param exportStartTime The export start time.
+ */
 function export(config: Config, options: ExportOptions, exportStartTime: Float) {
   config.debug = options.debug;
 
@@ -41,12 +70,16 @@ function export(config: Config, options: ExportOptions, exportStartTime: Float) 
     generateAtlas();
   }
 
-  exportProject(config);
+  exportProject(config, options.pack);
 
   final buildTime = Timer.stamp() - exportStartTime;
   Sys.println('Export completed in ${Math.floor(buildTime * 100) / 100.0} seconds.');
 }
 
+/**
+ * Clean the export path.
+ * @param exportPath The path to the export directory.
+ */
 function cleanExportPath(exportPath: String) {
   Sys.println('Cleaning export path: ${exportPath}');
   deleteDir(exportPath);
@@ -164,4 +197,5 @@ function buildHelp() {
   Sys.println('--no-atlas    Skip generating sprite atlases.');
   Sys.println('--no-assets   Skip copying the assets.');
   Sys.println('--code-only   Only compile the haxe code.');
+  Sys.println('--pack        Create a .love package. Only for the Love2d target.');
 }
