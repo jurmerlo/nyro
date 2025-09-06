@@ -1,3 +1,3 @@
-package nyro.core.di;
+package nyro.di;
 
 interface Service {}

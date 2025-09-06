@@ -1,4 +1,4 @@
-package nyro.core.utils;
+package nyro.utils;
 
 /**
  * Bit Sets are used to bit shift.

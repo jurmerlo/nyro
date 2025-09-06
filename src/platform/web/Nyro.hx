@@ -1,21 +1,29 @@
-package nyro.core.platforms.web;
+package platform.web;
 
 import js.Browser;
 import js.html.CanvasElement;
 
-using nyro.core.utils.Destructure;
+import nyro.NyroOptions;
+import nyro.di.Services;
+import nyro.events.Events;
+import nyro.input.KeyCode;
+import nyro.input.KeyboardEvent;
+
+using nyro.utils.Destructure;
 
 private final MAX_DT = 1.0 / 15;
 
-@:build(nyro.core.utils.CoreMacros.buildCoreConfig())
-class Core {
+@:build(nyro.utils.Macros.buildNyroConfig())
+class Nyro {
   public final canvas: CanvasElement;
 
   public var targetFps: Int;
 
-  static var options: CoreOptions;
+  static var options: NyroOptions;
 
   var lastFrameTime: Float;
+
+  final events: Events;
 
   public function new() {
     options.destructure(final width, final height, final targetFps);
@@ -33,9 +41,16 @@ class Core {
     canvas.height = height;
     canvas.style.width = '${width}px';
     canvas.style.height = '${height}px';
+
+    events = new Events();
+    Services.add(events);
   }
 
-  public function start() {}
+  public function start() {
+    final listener = events.addListener(KeyboardEvent.KEY_DOWN, (e) -> {
+      trace('key: ${e.key}, code: ${e.code}');
+    }, (e) -> e.key == KeyCode.A);
+  }
 
   function toBackground() {}
 

@@ -4,6 +4,8 @@
 -D js-es=6
 -D web
 
+--debug
+
 --js export/web/main.js
 
 --main Main

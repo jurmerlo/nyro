@@ -7,6 +7,8 @@
 -D luajit
 -D love2d
 
+--debug
+
 --lua export/love2d/main.lua
 
 --main Main

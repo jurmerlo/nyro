@@ -1,6 +1,6 @@
-package nyro.core;
+package nyro;
 
-typedef CoreOptions = {
+typedef NyroOptions = {
   var width: Int;
 
   var height: Int;

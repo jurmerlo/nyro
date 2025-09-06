@@ -1,4 +1,4 @@
-package nyro.core.utils;
+package nyro.utils;
 
 import haxe.macro.Expr;
 
@@ -24,5 +24,5 @@ import haxe.macro.Expr;
  * @param exprs The variables to assign the destructured values to.
  */
 macro function destructure(input: Expr, exprs: Array<Expr>) {
-  return nyro.core.utils.CoreMacros.destructureMacro(input, exprs);
+  return nyro.utils.Macros.destructureMacro(input, exprs);
 }

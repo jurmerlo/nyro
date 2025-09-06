@@ -1,4 +1,4 @@
-package nyro.core.di;
+package nyro.di;
 
 /**
  * Dependency injection services container class.

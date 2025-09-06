@@ -1,10 +1,10 @@
 package;
 
-import nyro.core.Core;
+import nyro.Nyro;
 
 class Main {
   public static function main() {
-    final core = new Core();
+    final core = new Nyro();
     core.start();
   }
 }
